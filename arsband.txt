@@ -1,0 +1,106 @@
+
+- game divided into Ages of several hundred years (seperated by Interregna of unspecified length)
+- Age finishes when
+    - the Enemy of that Age is defeated
+    - all covenants of that Age are lost
+
+- notable events in an Age:
+    - Emperor
+    - Grand Genius
+
+- more detailed history also recorded
+
+- more powerful items/writings etc are more likely to survive an Interregnum
+
+- tables kept across Ages:
+  - Winners
+      incl. Magi, Covenant and Age data
+  - Emperors
+  - Grand Genii
+  - Magi
+      Age, highest Art, #spell levels, best writings, best items, best familiars, etc
+  - Covenants
+      resources, writings, enchantments, auras/regio, vis sources, ???
+  - Writings
+  - Enchantments
+  - Spells
+
+- RoR-derived events/resources/decisions (extended to last up to 500 years ie 10x)
+- Magi from all Covenants meet every 7 years as the Senate: officers elected, etc.  Senate can elect Grand Genius.
+    Generally Magi from the same Covenant will act together in the Senate.
+- Each Covenant meets on the 2nd and 5th years of the cycle as a Council.
+    Both companions and magi have a vote.
+    A combination of a Magi and several companions within a Covenant form a House
+    (companions can move between Houses).
+- Magi can oppose the Senate: a victorius Magi becomes Emperor
+
+- Magi can ignore Senate/Council politics and concentrate on defeating Morgoth or searching for old secrets 
+  (including remnants of Covenants from past Ages)
+
+- Defeating Morgoth includes investigating one or several dungeons, killing things and taking their stuff.
+- Angband-style random generation of dungeons, things and their stuff (but not Too Much Junk)
+- Ars 5th edition style combat.
+- In order to defeat Morgoth it is also necessary to research secrets and solve problems using library resources.
+- There is also an FA-style overworld, where the covenants and various possible resources/allies/enemies are located.
+- Gathering the resources to defeat Morgoth may take the combined resources of several centuries-old covenants.
+
+
+- There is an OOC Arena/Observation Deck where you may set up combats between a snapshot of your Magi and any 
+  possible opponent, including arranging the site of the conflict (arena). 
+- Some sort of Arena-only victory tables will also be kept.
+
+- Many/most Magi (and all companions) are AI robots/borg. 
+- Robots will use various AI implementations, and have various game-level foci, 
+  including using Ars Magica style Houses as goal/methodology templates. Some implementation of personality as well.
+- Some Borg will participate in the Arena competitions.
+
+- Borg Magi will discuss plans, tactics, strategy, etc with players and with each other across various 
+  communication channels within the game. 
+
+- Some robots on the Observation Deck act as tutors/advisors/assistants for players. 
+- Also the Observation Deck will have an AI crowd which will observe the fighting in the Arenas and cheer, jeer and mutter.
+
+- The game runs on TinyMUSH 3.1+ softcode, possibly with a Python extension module for spells and other magical abilities.
+- The victory tables are maintained in a MySQL database also visible from a website.
+- A game blog/forum will include borg-written postings from inside the game.
+- The borg are written in a combination of C++0x and Python 3.0. They communicate mainly in Gellish, with some
+  additional capacity to analyse English. 
+
+
+NB telnet.cpp using boost::asio
+
+--------
+
+- Build a New Player Room, Reading Room, Observation Deck, Locker Room, and Arena.
+- make some Ob Deck chat robots (discuss who is connected, descs, places in Ob Deck)
+- Get basic 1 on 1 combat working with players (maybe no weapons, maybe assume invisible daggers)
+- Maybe add some simple weapons/armour objects
+- Make a Gellish dictionary/whatever of all the above
+- Make a robot combatant
+- Increase complexity of combat, make robot deal with that complexity, and make robot have a more complex discussion
+- Make Ob Deck crowd/advisor robots/Arena competitions
+- Make some standard grogs
+- Make some standard companions - possibly some minor magic
+- Get multiple Arenas/robots in simultaneous operation
+- track multiple characters for a single player
+
+--> Now move on to Magi/Praesidia/etc
+--> Spells (inc combat)     ??Python
+--> Texts, libraries, vis, ...
+--> Ruling Councils/Time
+--> What must be learnt before a preliminary dungeon can be entered
+--> Multiple Councils/overland
+--> Senate
+--> ...
+
+---------------------------
+
+#1 Manwe: potrzebie
+#3 Gandalf the Wizard: Galadcirith
+#4 Feanor the Builder: Baradrond
+#6 Menerain the Player: Guldor
+
+
+
+
+
