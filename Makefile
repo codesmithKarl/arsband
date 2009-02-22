@@ -4,11 +4,19 @@ CPPFLAGS =
 INCS = 
 DEFS = 
 LIBS = -lboost_system -lboost_thread
+TESTLIBS = -lUnitTest++
 
-all: tags robot
+all: tags tests robot
 
 tags: *.cpp *.hpp
 	ctags -R 
+
+.PHONY: tests
+tests: test_robot
+	./test_robot
+
+test_robot: test_robot.o robot.o
+	$(CXX) -o $@ $(CXXFLAGS) $^ $(LIBS) $(TESTLIBS)
 
 robot: main.o robot.o telnet_client.o
 	$(CXX) -o $@ $(CXXFLAGS) $^ $(LIBS)
@@ -18,4 +26,4 @@ robot: main.o robot.o telnet_client.o
 
 .PHONY: clean
 clean: 
-	rm -f *.o
+	rm -f *.o *~

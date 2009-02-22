@@ -1,7 +1,7 @@
 // =====================================================================================
 //       Filename:  robot.cpp
 // 
-//    Description:  
+//    Description:  TODO
 // 
 //        Created:  22/02/09 15:01:25
 //         Author:  Karl Miller (km), karl.miller.km@gmail.com
@@ -77,22 +77,17 @@ namespace arsband
     {
       cond.wait(lock);
     }
-    std::cout << "\n" << incoming_buffer << "\n";
+    std::cerr << "\n" << incoming_buffer << "\n";
     incoming_buffer.clear();
     new_text_in_buffer = false;
   }
 
   void robot::write_line(std::string& line)
   {
-    for(unsigned i=0; i<line.length(); i++)
+    if (client.active())
     {
-      if (client.active())
-      {
-        client.write(line[i]);
-        std::cout << line[i];
-      }
-      else
-        break;
+      client.write(line.c_str(), line.length());
+      std::cerr << line;
     }
   }
 

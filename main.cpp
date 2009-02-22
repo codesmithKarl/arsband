@@ -10,7 +10,6 @@
  * =====================================================================================
  */
 
-// TODO: refactor arsband_robot to seperate header/source files with namespace
 // TODO: write a mock telnet_client and automate tests for the following functionalities:
 //
 // TODO: recognise some text (connect, logon, response to 'say time()')
@@ -25,11 +24,10 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
-//#include <boost/utility.hpp>
+typedef boost::asio::ip::tcp asio_tcp;
 
 #include "robot.hpp"
 
-typedef boost::asio::ip::tcp asio_tcp;
 
 int main(int argc, char* argv[])
 {

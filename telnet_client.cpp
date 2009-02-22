@@ -28,9 +28,12 @@ telnet_client::telnet_client(boost::asio::io_service& io_service,
 }
  
 // pass the write data to the do_write function via the io service in the other thread
-void telnet_client::write(const char msg)
+void telnet_client::write(const char* msg, int len)
 {
-  io_service_.post(boost::bind(&telnet_client::do_write, this, msg));
+  for(int i=0; i<len; i++)
+  {
+    io_service_.post(boost::bind(&telnet_client::do_write, this, msg[i]));
+  }
 }
 
 // call the do_close function via the io service in the other thread
