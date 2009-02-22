@@ -10,30 +10,15 @@
  * =====================================================================================
  */
 
-
-/* telnet.cpp
-   A simple demonstration telnet client with Boost asio
-
-Parameters:
-hostname or address
-port - typically 23 for telnet service
-
-To end the application, send Ctrl-C on standard input
-*/
-
 #include "telnet_client.hpp"
 
 #include <iostream>
 #include <boost/bind.hpp>
 
-//#ifdef POSIX
-//#include <termios.h>
-//#endif
-
-using boost::asio::ip::tcp;
+typedef boost::asio::ip::tcp asio_tcp;
 
 telnet_client::telnet_client(boost::asio::io_service& io_service, 
-                             tcp::resolver::iterator endpoint_iterator, 
+                             asio_tcp::resolver::iterator endpoint_iterator, 
                              completed_read_func* f)
 : active_(true), io_service_(io_service), socket_(io_service),
   connect_timer_(io_service), connection_timeout(boost::posix_time::seconds(3)),
@@ -63,9 +48,9 @@ bool telnet_client::active()
 }
 
 // asynchronously connect a socket to the specified remote endpoint and call connect_complete when it completes or fails
-void telnet_client::connect_start(tcp::resolver::iterator endpoint_iterator)
+void telnet_client::connect_start(asio_tcp::resolver::iterator endpoint_iterator)
   {
-  tcp::endpoint endpoint = *endpoint_iterator;
+  asio_tcp::endpoint endpoint = *endpoint_iterator;
   socket_.async_connect(endpoint,
                         boost::bind(&telnet_client::connect_complete,
                                     this,
@@ -77,7 +62,7 @@ void telnet_client::connect_start(tcp::resolver::iterator endpoint_iterator)
 }
 
 // the connection to the server has now completed or failed and returned an error
-void telnet_client::connect_complete(const boost::system::error_code& error, tcp::resolver::iterator )
+void telnet_client::connect_complete(const boost::system::error_code& error, asio_tcp::resolver::iterator )
 {
   if (!error) // success, so start waiting for read data
   {

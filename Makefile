@@ -5,9 +5,12 @@ INCS =
 DEFS = 
 LIBS = -lboost_system -lboost_thread
 
-all: robot
+all: tags robot
 
-robot: robot.o telnet_client.o
+tags: *.cpp *.hpp
+	ctags -R 
+
+robot: main.o robot.o telnet_client.o
 	$(CXX) -o $@ $(CXXFLAGS) $^ $(LIBS)
 
 %.o: %.cpp

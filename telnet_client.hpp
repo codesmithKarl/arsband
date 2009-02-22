@@ -17,18 +17,14 @@
 #include <boost/asio.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
-// using = asio
-using boost::asio::ip::tcp;
+typedef boost::asio::ip::tcp asio_tcp;
 
-
-// clients override operator()
+// clients should override operator()
 struct completed_read_func
 {
-//  virtual void operator()(const char* msg, int len)
-  virtual void operator()(const char*, int) 
+  virtual void operator()(const char* msg, int len)
   {
-    std::cout << "got something\n";
-//    std::cout.write(msg, len);
+    std::cout.write(msg, len);
   }
 };
 
@@ -36,7 +32,9 @@ struct completed_read_func
 class telnet_client
 {
   public:
-    telnet_client(boost::asio::io_service& io_service, tcp::resolver::iterator endpoint_iterator, completed_read_func* f);
+    telnet_client(boost::asio::io_service& io_service, 
+                  asio_tcp::resolver::iterator endpoint_iterator, 
+                  completed_read_func* f);
 
     // pass the write data to the do_write function via the io service in the other thread
     void write(const char msg);
@@ -53,10 +51,10 @@ class telnet_client
     static const int max_read_length = 512;
 
     // asynchronously connect a socket to the specified remote endpoint and call connect_complete when it completes or fails
-    void connect_start(tcp::resolver::iterator endpoint_iterator);
+    void connect_start(asio_tcp::resolver::iterator endpoint_iterator);
 
     // the connection to the server has now completed or failed and returned an error
-    void connect_complete(const boost::system::error_code& error, tcp::resolver::iterator endpoint_iterator);
+    void connect_complete(const boost::system::error_code& error, asio_tcp::resolver::iterator endpoint_iterator);
 
     // Start an asynchronous read and call read_complete when it completes or fails
     void read_start(void);
@@ -79,7 +77,7 @@ class telnet_client
   private:
     bool active_; // remains true while this object is still operating
     boost::asio::io_service& io_service_; // the main IO service that runs this connection
-    tcp::socket socket_; // the socket this instance is connected to
+    asio_tcp::socket socket_; // the socket this instance is connected to
     boost::asio::deadline_timer connect_timer_;
     boost::posix_time::time_duration connection_timeout; // time to wait for the connection to succeed
     char read_msg_[max_read_length]; // data read from the socket
