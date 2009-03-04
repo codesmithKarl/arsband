@@ -12,17 +12,13 @@ tags: *.cpp *.hpp
 	ctags -R 
 
 .PHONY: tests
-tests: test_robot test_regex
+tests: test_robot 
 	./test_robot
-	./test_regex tests/logon.txt
 
-test_regex : regex.o
+test_robot: test_robot.o robot.o client_buffer.o
 	$(CXX) -o $@ $^ $(LIBS) $(TESTLIBS)
 
-test_robot: test_robot.o robot.o
-	$(CXX) -o $@ $^ $(LIBS) $(TESTLIBS)
-
-robot: main.o robot.o telnet_client.o
+robot: main.o robot.o telnet_client.o client_buffer.o
 	$(CXX) -o $@ $(CXXFLAGS) $^ $(LIBS)
 
 %.o: %.cpp

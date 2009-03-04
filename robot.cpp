@@ -1,7 +1,7 @@
 // =====================================================================================
 //       Filename:  robot.cpp
 // 
-//    Description:  TODO
+//    Description: basic ArsBand robot 
 // 
 //        Created:  22/02/09 15:01:25
 //         Author:  Karl Miller (km), karl.miller.km@gmail.com
@@ -10,24 +10,22 @@
 #include "robot.hpp"
 
 #include <iostream>
-#include <boost/bind.hpp>
-#include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/regex.hpp>
 
-typedef boost::asio::ip::tcp asio_tcp;
+#include "client_buffer.hpp"
 
 namespace arsband
 {
-  robot::robot(boost::asio::io_service& io_service, asio_tcp::resolver::iterator io_iterator)
-    : incoming_buffer(), new_text_in_buffer(false), func(*this), cond(), mut(),
-      client(io_service, io_iterator, &func), 
-      thread(boost::bind(&boost::asio::io_service::run, &io_service))
-  {}
+  robot::robot(boost::asio::io_service& io_service, boost::asio::ip::tcp::resolver::iterator io_iterator)
+    : buffer(new client_buffer()), 
+    client(io_service, io_iterator, &buffer->func) 
+  {
+    buffer->start_thread(io_service);
+  }
 
   robot::~robot()
   {
     client.close(); // close the telnet client connection
-    thread.join(); // wait for the IO service thread to close
   }
 
   void robot::activate() 
@@ -39,23 +37,23 @@ namespace arsband
     check_time_report();
 
     std::string saybye = "say Bye!\n";
-    write_line(saybye);
+    send_line(saybye);
     std::string logout = "QUIT\n";
-    write_line(logout);
+    send_line(logout);
   }
 
   void robot::check_connection_text()
   {
-    wait_for_new_text();
+    buffer->wait_for_new_text();
 
     boost::regex welcome("^Welcome to ArsBand MUSH$");
-    if(boost::regex_search(incoming_buffer, welcome))
+    if(boost::regex_search((*buffer)(), welcome))
     {
       std::cerr << "Welcomed.\n";
-      clear_buffer();
+      buffer->clear_buffer();
 
       std::string login = "connect Robot robot\n";
-      write_line(login);
+      send_line(login);
     }
     else
     {
@@ -67,10 +65,10 @@ namespace arsband
 
   void robot::check_logon_text()
   {
-    wait_for_new_text();
+    buffer->wait_for_new_text();
 
     boost::regex end_login("^Last connect");
-    if(boost::regex_search(incoming_buffer, end_login))
+    if(boost::regex_search((*buffer)(), end_login))
     {
       std::cerr << "Completed login.\n";
     }
@@ -81,7 +79,7 @@ namespace arsband
 
     boost::smatch what_room;
     boost::regex room_name("^(.*)\\(#\\d+R.*\\)$");
-    if(boost::regex_search(incoming_buffer, what_room, room_name, boost::match_not_dot_newline))
+    if(boost::regex_search((*buffer)(), what_room, room_name, boost::match_not_dot_newline))
     {
       std::cerr << "Location: [" << what_room.str(1) << "]\n";
     }
@@ -114,52 +112,26 @@ namespace arsband
     }
     else
     {
-        std::cerr << "Could not find end of contents.\n";
+      std::cerr << "Could not find end of contents.\n";
     }
 
-    clear_buffer();
+    buffer->clear_buffer();
 
     std::string sayhi = "say Hi!\n";
-    write_line(sayhi);
+    send_line(sayhi);
   }
 
   void robot::check_time_report()
   {
     std::string saytime = "say time()\n";
-    write_line(saytime);
+    send_line(saytime);
 
-    wait_for_new_text();
+    buffer->wait_for_new_text();
     //TODO: wait for time report
-    clear_buffer();
+    buffer->clear_buffer();
   }
 
-  void robot::append_text_to_buffer(const char* msg, int len)
-  {
-    {
-      boost::lock_guard<boost::mutex> lock(mut);
-      incoming_buffer.append(msg, len);
-      new_text_in_buffer = true;  
-    }
-    cond.notify_one();
-  }
-
-  void robot::wait_for_new_text()
-  {
-    boost::unique_lock<boost::mutex> lock(mut);
-    while(!new_text_in_buffer)
-    {
-      cond.wait(lock);
-    }
-    new_text_in_buffer = false;
-    std::cerr << "\n" << incoming_buffer << "\n";
-  }
-
-  void robot::clear_buffer()
-  {
-    incoming_buffer.clear();
-  }
-
-  void robot::write_line(std::string& line)
+  void robot::send_line(std::string& line)
   {
     if (client.active())
     {

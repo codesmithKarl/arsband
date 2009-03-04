@@ -15,8 +15,6 @@
 #include <iostream>
 #include <boost/bind.hpp>
 
-typedef boost::asio::ip::tcp asio_tcp;
-
 telnet_client::telnet_client(boost::asio::io_service& io_service, 
                              asio_tcp::resolver::iterator endpoint_iterator, 
                              completed_read_func* f)
