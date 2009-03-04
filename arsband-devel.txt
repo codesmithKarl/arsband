@@ -1,0 +1,9 @@
+ArsBand MUSH is a collection of software, divided into 3 inter-related groups.
+
+- The MUSH server and associated softcode
+- The MUSH database and content generators
+- The robots
+
+Each group should have automated Acceptance Tests (written in FIT or cucumber) 
+and Unit Tests (written in rspec or UnitTest++). Additionally there should be automated
+Integration Tests written in cucumber and rspec crossing all three groups.

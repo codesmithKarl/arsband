@@ -1,24 +1,22 @@
 /*
  * =====================================================================================
- *
  *       Filename:  main.cpp
  *    Description:  runs an ArsBand robot 
  *     Parameters:  hostname or address, port
  *        Created:  21/02/09 19:17:22
  *         Author:  Karl Miller (km), karl.miller.km@gmail.com
- *
  * =====================================================================================
  */
 
-// TODO: write a mock telnet_client and automate tests for the following functionalities:
-//
+// automate tests for the following functionalities:
 // TODO: recognise some text (connect, logon, response to 'say time()')
 // TODO: recognise others present
 // TODO: greet others present by name when logging on
 // TODO: respond to greetings directed at self (know own name)
+// TODO: diagnostics (size, memory, time running, time compiled, ...)
 // TODO: recognise logons
 // TODO: greet new logons
-// TODO: logoff after number of new logons
+// TODO: logoff after certain number of new logons
 // TODO: multiple robots
 
 
@@ -35,7 +33,7 @@ int main(int argc, char* argv[])
   {
     if (argc != 3)
     {
-      std::cerr << "Usage: telnet <host> <port>\n";
+      std::cerr << "Usage: robot <host> <port>\n";
       return 1;
     }
 

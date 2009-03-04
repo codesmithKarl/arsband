@@ -1,0 +1,27 @@
+
+This world is Pueblo 1.0 enhanced
+
+Welcome to ArsBand MUSH
+------------------------------------------------------------------------------
+  "connect <name> <password>" connects you to an existing character.
+  "create <name> <password>" creates a new character.
+  "WHO" tells you who is logged in to the game (case sensitive).
+  "QUIT" exits the game and saves your character.
+------------------------------------------------------------------------------
+
+connect Robot robot
+
+Initial construction is complete on the Observation Deck and surrounding areas.
+There is more work yet to do.
+
+### end of messages ###
+MAIL: You have no mail.
+Last connect was from localhost on Mon Feb 23 00:40:50 2009.
+Observation Deck(#66RL)
+A large open-sided area with many people in small groups. The roof protects you from the weather, but beyond the low walls you can see and hear the sounds of combat in the Arena.
+Contents:
+Gandalf(#3PWXc)
+Ear-1
+Obvious exits:
+Locker Room  Reading Room
+

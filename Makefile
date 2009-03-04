@@ -1,9 +1,9 @@
 CXX = g++
-CXXFLAGS = -g -O2 -pedantic -ansi -Wall -Wextra -Werror -Wconversion -Wshadow -Wcast-qual -Wwrite-strings 
+CXXFLAGS = -std=c++0x -g -O2 -pedantic -ansi -Wall -Wextra -Werror -Wconversion -Wshadow -Wcast-qual -Wwrite-strings 
 CPPFLAGS = 
 INCS = 
 DEFS = 
-LIBS = -lboost_system -lboost_thread
+LIBS = -lboost_system -lboost_thread -lboost_regex
 TESTLIBS = -lUnitTest++
 
 all: tags tests robot
@@ -12,11 +12,15 @@ tags: *.cpp *.hpp
 	ctags -R 
 
 .PHONY: tests
-tests: test_robot
+tests: test_robot test_regex
 	./test_robot
+	./test_regex tests/logon.txt
+
+test_regex : regex.o
+	$(CXX) -o $@ $^ $(LIBS) $(TESTLIBS)
 
 test_robot: test_robot.o robot.o
-	$(CXX) -o $@ $(CXXFLAGS) $^ $(LIBS) $(TESTLIBS)
+	$(CXX) -o $@ $^ $(LIBS) $(TESTLIBS)
 
 robot: main.o robot.o telnet_client.o
 	$(CXX) -o $@ $(CXXFLAGS) $^ $(LIBS)

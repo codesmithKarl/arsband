@@ -29,11 +29,33 @@ struct completed_read : public completed_read_func
   robot_type& robot;
 };
 
+// TODO: refactor all thread code into a seperate class
+// TODO: refactor buffer into a config parameter
 
 namespace arsband
 {
   class robot : boost::noncopyable
   {
+    friend class completed_read<robot>;
+
+    public:
+    robot(boost::asio::io_service& io_service, 
+          boost::asio::ip::tcp::resolver::iterator io_iterator);
+    ~robot();
+
+    void activate();
+
+    private:
+    void append_text_to_buffer(const char* msg, int len);
+    void wait_for_new_text();
+    void write_line(std::string& line);
+    void clear_buffer();
+
+    void check_connection_text();
+    void check_logon_text();
+    void check_time_report();
+
+    private:
     std::string incoming_buffer;
     bool new_text_in_buffer;
     completed_read<robot> func;
@@ -41,21 +63,6 @@ namespace arsband
     boost::mutex mut;
     telnet_client client;
     boost::thread thread;
-
-    public:
-    robot(boost::asio::io_service& io_service, 
-          boost::asio::ip::tcp::resolver::iterator io_iterator);
-
-    ~robot();
-
-    void activate();
-
-    void append_text_to_buffer(const char* msg, int len);
-
-    private:
-    void wait_for_new_text();
-
-    void write_line(std::string& line);
   };
 }
 

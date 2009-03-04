@@ -76,6 +76,11 @@ TEST(CommunicateInCorrectOrder)
   CHECK_EQUAL("QUIT\n", robot_replies[4]);
 }
 
+// TEST(SayHelloToOthersPresentWhenLoggingOn)
+// TEST(SayHelloToOthersWhoLogOn)
+// TEST(Diagnostics)
+// TEST(LogOffAfterCountingLogOns)
+
 int main()
 {
     std::cerr << "------------------ROBOT SPEC-----------------\n";
