@@ -14,6 +14,10 @@
 
 #include "client_buffer.hpp"
 
+// TODO: refactor towards FSM
+// --> a single state FSM that copies all data from client to a log
+// --> connection states
+
 namespace arsband
 {
   robot::robot(boost::asio::io_service& io_service, boost::asio::ip::tcp::resolver::iterator io_iterator)
