@@ -16,7 +16,7 @@ struct completed_read : public completed_read_func
 {
   completed_read(buffer_type& b) : buffer(b) {}
 
-  virtual void operator()(const char* msg, int len)
+  virtual void operator()(const char* msg, size_t len)
   {
     buffer.append_text_to_buffer(msg, len);
   }
@@ -43,7 +43,7 @@ namespace arsband
     client_buffer();
     ~client_buffer();
     void start_thread(boost::asio::io_service& io_service); 
-    void append_text_to_buffer(const char*, int);
+    void append_text_to_buffer(const char*, size_t);
     void wait_for_new_text();
     void clear_buffer();
     std::string operator()() const;

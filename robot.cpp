@@ -13,8 +13,12 @@
 #include <boost/regex.hpp>
 
 #include "client_buffer.hpp"
+#include "robot_fsm.hpp"
 
 // TODO: refactor towards FSM
+// --> compile w a single state FSM && no events
+// --> compile w a single state FSM && a no-op event
+// --> single state FSM and a timestamp event
 // --> a single state FSM that copies all data from client to a log
 // --> connection states
 
@@ -22,7 +26,8 @@ namespace arsband
 {
   robot::robot(boost::asio::io_service& io_service, boost::asio::ip::tcp::resolver::iterator io_iterator)
     : buffer(new client_buffer()), 
-    client(io_service, io_iterator, &buffer->func) 
+      client(io_service, io_iterator, &buffer->func),
+      state(new fsm())
   {
     buffer->start_thread(io_service);
   }
@@ -48,7 +53,7 @@ namespace arsband
 
   void robot::check_connection_text()
   {
-    buffer->wait_for_new_text();
+    wait_for_new_text();
 
     boost::regex welcome("^Welcome to ArsBand MUSH$");
     if(boost::regex_search((*buffer)(), welcome))
@@ -67,9 +72,26 @@ namespace arsband
     }
   }
 
-  void robot::check_logon_text()
+  void robot::wait_for_new_text() 
   {
     buffer->wait_for_new_text();
+
+    const char eol = '\n';
+    std::string::size_type start = 0;
+    std::string::size_type stop = buffer->buffer.find_first_of(eol);
+    while (stop != std::string::npos)
+    {
+      std::string line = buffer->buffer.substr(start, stop - start + 1);
+      state->process_event(EvReceived(line));
+
+      start = stop + 1;
+      stop = buffer->buffer.find_first_of(eol, stop + 1);
+    }
+  }
+
+  void robot::check_logon_text()
+  {
+    wait_for_new_text();
 
     boost::regex end_login("^Last connect");
     if(boost::regex_search((*buffer)(), end_login))
@@ -130,7 +152,7 @@ namespace arsband
     std::string saytime = "say time()\n";
     send_line(saytime);
 
-    buffer->wait_for_new_text();
+    wait_for_new_text();
     //TODO: wait for time report
     buffer->clear_buffer();
   }

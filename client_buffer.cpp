@@ -20,7 +20,7 @@ namespace arsband
     thread = boost::thread(boost::bind(&boost::asio::io_service::run, &io_service));
   }
 
-  void client_buffer::append_text_to_buffer(const char* msg, int len)
+  void client_buffer::append_text_to_buffer(const char* msg, size_t len)
   {
     {
       boost::lock_guard<boost::mutex> lock(mut);

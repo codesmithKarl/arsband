@@ -22,7 +22,7 @@ typedef boost::asio::ip::tcp asio_tcp;
 // clients should subclass and override operator()
 struct completed_read_func
 {
-  virtual void operator()(const char* msg, int len)
+  virtual void operator()(const char* msg, size_t len)
   {
     std::cout.write(msg, len);
   }
@@ -37,7 +37,7 @@ class telnet_client
                   completed_read_func* f);
 
     // pass the write data to the do_write function via the io service in the other thread
-    void write(const char* msg, int len);
+    void write(const char* msg, size_t len);
 
     // call the do_close function via the io service in the other thread
     void close();

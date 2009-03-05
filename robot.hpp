@@ -17,7 +17,6 @@
 namespace arsband
 {
   class client_buffer;
-
   class robot : boost::noncopyable
   {
     public:
@@ -26,8 +25,10 @@ namespace arsband
     ~robot();
 
     void activate();
+    class fsm;
 
     private:
+    void wait_for_new_text();
     void send_line(std::string& line);
 
     void check_connection_text();
@@ -37,6 +38,8 @@ namespace arsband
     private:
     std::auto_ptr<client_buffer> buffer; 
     telnet_client client;
+
+    std::auto_ptr<robot::fsm> state;
   };
 }
 

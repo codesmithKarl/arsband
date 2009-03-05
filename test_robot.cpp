@@ -31,7 +31,7 @@ telnet_client::telnet_client(boost::asio::io_service& io_service,
   mock_msg = mock_mush_output.begin();
 }
 
-void telnet_client::write(const char* msg, int len)
+void telnet_client::write(const char* msg, size_t len)
 {
   std::string reply(msg, len);
   robot_replies.push_back(reply);
